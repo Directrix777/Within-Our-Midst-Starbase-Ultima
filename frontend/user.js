@@ -4,5 +4,6 @@ class User
     {
         this.name = name
         this.alive = true
+        this.color = this.setColor
     }
 }
