@@ -1,21 +1,40 @@
-const newUUID = PubNub.generateUUID()
+
 const pubnub = new PubNub({
-    uuid: newUUID,
+    uuid: Math.random()*100,
     publish_key: 'pub-c-b1e91afd-fb2e-4e9c-b199-907f7512cbad',
     subscribe_key: 'sub-c-691174e4-17aa-11eb-a3e5-1aef4acbe547',
     ssl: true
   });
-  pubnub.subscribe({channels: ["aliveChat"]});
+  pubnub.subscribe({channels: ["aliveChat"], withPresence: true});
+  pubnub.hereNow(
+    {
+      channels: ["aliveChat"],
+      includeState: true
+    },
+    function (status, response) {
+      console.log(status, response);
+    }
+  );
   pubnub.addListener({
     message: function(m) {
         // handle message
 
         let p = document.createElement('p')
         p.innerText = m.message
+        console.log(m.publisher)
+        console.log(pubnub.getUUID())
+        if (m.publisher == pubnub.getUUID())
+        {
+            p.className = "my-message"
+        }
         document.body.appendChild(p)
     },
     presence: function(p) {
         // handle presence
+        let pg = document.createElement('p')
+        pg.innerText = p.uuid
+        document.body.appendChild(pg)
+
         let action = p.action; // Can be join, leave, state-change, or timeout
         let channelName = p.channel; // The channel to which the message was published
         let occupancy = p.occupancy; // No. of users subscribed to the channel
@@ -38,7 +57,6 @@ function sendMessage(e, chatInput) {
         pubnub.publish(
             {
               channel: "aliveChat",
-              //sender: [an instance of a user]
               message: text
             },
             function(status, response) {
