@@ -1,12 +1,14 @@
-
+const pubID = parseInt(Math.random()*1000000)
+console.log(pubID)
 const pubnub = new PubNub({
-    uuid: Math.random()*100,
+    uuid: pubID,
     publish_key: 'pub-c-b1e91afd-fb2e-4e9c-b199-907f7512cbad',
     subscribe_key: 'sub-c-691174e4-17aa-11eb-a3e5-1aef4acbe547',
     ssl: true
-  });
-  pubnub.subscribe({channels: ["aliveChat"], withPresence: true});
-  pubnub.hereNow(
+});
+const user = new User(prompt("Enter your player name"), pubID)
+pubnub.subscribe({channels: ["aliveChat"], withPresence: true});
+pubnub.hereNow(
     {
       channels: ["aliveChat"],
       includeState: true
@@ -14,26 +16,32 @@ const pubnub = new PubNub({
     function (status, response) {
       console.log(status, response);
     }
-  );
-  pubnub.addListener({
+);
+pubnub.addListener({
     message: function(m) {
         // handle message
 
+        let d = document.createElement('div')
         let p = document.createElement('p')
         p.innerText = m.message
-        console.log(m.publisher)
-        console.log(pubnub.getUUID())
+        d.appendChild(p)
         if (m.publisher == pubnub.getUUID())
         {
-            p.className = "my-message"
+            d.className = "my-message"
         }
-        document.body.appendChild(p)
+        else
+        {
+            d.className = "message"
+        }
+        d.className = `${d.className} container-sm`
+        document.body.appendChild(d)
     },
     presence: function(p) {
         // handle presence
-        let pg = document.createElement('p')
-        pg.innerText = p.uuid
-        document.body.appendChild(pg)
+        if(p.action == 'join')
+        {
+            console.log("Someone joined!")
+        }
 
         let action = p.action; // Can be join, leave, state-change, or timeout
         let channelName = p.channel; // The channel to which the message was published
@@ -57,7 +65,8 @@ function sendMessage(e, chatInput) {
         pubnub.publish(
             {
               channel: "aliveChat",
-              message: text
+              message: text,
+              sender: user.name
             },
             function(status, response) {
               console.log(status);

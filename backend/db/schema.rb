@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(version: 2020_10_27_194327) do
     t.string "color"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.float "pubnub_id"
+    t.integer "pubnub_id"
   end
 
 end

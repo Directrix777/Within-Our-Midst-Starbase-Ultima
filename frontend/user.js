@@ -1,12 +1,17 @@
+const baseURL = 'http://localhost:3000'
+const usersURL = `${baseURL}/users`
+
 class User
 {
-    constructor(name)
+    constructor(name, pubId)
     {
         this.name = name
         this.alive = true
-        this.dbVersion = this.makeDbVersion()
+        this.pubId = pubId
+        console.log(this)
+        this.makeDbVersion()
     }
-
+    
     makeDbVersion()
     {
         let options = {
@@ -15,9 +20,9 @@ class User
                 "Content-Type": "application/json",
                 "Accept": "application/json"
             },
-            body: JSON.stringify({name: this.name})
+            body: JSON.stringify({name: this.name, pubnub_id: this.pubId})
         }
-        return fetch('http://localhost:3000/users/', options)
+        fetch('http://localhost:3000/users', options)
         .then(r => r.json)
         .then(r => console.log(r))
     }

@@ -5,22 +5,24 @@ class UsersController < ApplicationController
     end
 
     def show
-        user = User.find_by(pubnub_id: params[:pubnub_id])
+        user = User.find_by(pubnub_id: params[:id])
+        render json: user
     end
 
     def create
         user = User.new
         user.name = params[:name]
+        user.pubnub_id = params[:pubnub_id]
         user.color = get_color
         user.save
-        redirect_to 'index'
+        redirect_to user_path(user.pubnub_id)
     end
 
     def destroy
         user = User.find_by(id: params[:id])
         if user
             user.delete
-            render json: {message: 'Successfully released!'}
+            render json: {message: 'Successfully deleted!'}
         else
             render json: {message: 'User not found'}
         end
@@ -32,7 +34,7 @@ class UsersController < ApplicationController
         colors.each do |color|
             users = User.all
             user_colors = users.collect{|user| user.color}
-            if (user_colors.include?(color))
+            if !(user_colors.include?(color) && final_color == 'weird green')
                 final_color = color
             end
         end
