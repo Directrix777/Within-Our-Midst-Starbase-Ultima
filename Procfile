@@ -1,1 +1,3 @@
-web: node frontend/index.html
+web: open frontend/index.html
+web: cd backend
+web: rails s
