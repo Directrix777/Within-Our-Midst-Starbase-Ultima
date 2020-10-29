@@ -1,11 +1,18 @@
 class User
 {
-    constructor(name, pubId)
+    constructor(name, pubId, color = '', alreadyInDb = false)
     {
         this.name = name
         this.alive = true
         this.pubId = pubId
-        this.makeDbVersion()
+        if(!alreadyInDb)
+        {
+            this.makeDbVersion()
+        }
+        else
+        {
+            this.moreVariableSetup(color)
+        }
     }
 
     moreVariableSetup(color)
@@ -30,7 +37,15 @@ class User
         })
     }
 
-    takeDbVersion()
+    static async takeDbVersion(pubId)
+    {
+        let attributes = await fetch(`http://localhost:3000/users/${pubId}`)
+        .then(r => r.json())
+        .then(r => {return [r['name'], pubId, r['color']]})
+        return new User(attributes[0], attributes[1], attributes[2], true)
+    }
+
+    breakDbVersion()
     {
         let options = {
             method: 'DELETE',

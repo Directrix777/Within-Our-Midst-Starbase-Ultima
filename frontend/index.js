@@ -16,23 +16,33 @@ pubnub.hereNow(
     function (status, response) {
       console.log(status, response);
     }
+    
 );
+let leave = document.createElement('button')
+leave.addEventListener('click', function(){user.breakDbVersion()})
+leave.innerText = "Leave"
+document.body.appendChild(leave)
 pubnub.addListener({
     message: function(m) {
         // handle message
 
         let d = document.createElement('div')
+        let name = document.createElement('h5')
         let p = document.createElement('p')
         p.innerText = m.message
-        d.appendChild(p)
+        
         if (m.publisher == pubnub.getUUID())
         {
             d.className = "my-message"
+            name.innerText = user.name
         }
         else
         {
             d.className = "message"
+            User.takeDbVersion(m.publisher).then(r => {name.innerText = r['name']})
         }
+        d.appendChild(name)
+        d.appendChild(p)
         d.className = `${d.className} container-sm`
         document.body.appendChild(d)
     },
@@ -66,7 +76,6 @@ function sendMessage(e, chatInput) {
             {
               channel: "aliveChat",
               message: text,
-              sender: user.name
             },
             function(status, response) {
               console.log(status);
