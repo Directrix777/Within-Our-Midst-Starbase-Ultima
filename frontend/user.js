@@ -1,6 +1,3 @@
-const baseURL = 'http://localhost:3000'
-const usersURL = `${baseURL}/users`
-
 class User
 {
     constructor(name, pubId)
@@ -8,10 +5,14 @@ class User
         this.name = name
         this.alive = true
         this.pubId = pubId
-        console.log(this)
         this.makeDbVersion()
     }
-    
+
+    moreVariableSetup(color)
+    {
+        this.color = color
+    }
+
     makeDbVersion()
     {
         let options = {
@@ -23,9 +24,25 @@ class User
             body: JSON.stringify({name: this.name, pubnub_id: this.pubId})
         }
         fetch('http://localhost:3000/users', options)
-        .then(r => r.json)
-        .then(r => console.log(r))
+        .then(r => r.json())
+        .then(r => { 
+            this.moreVariableSetup(r['color'])
+        })
     }
+
+    takeDbVersion()
+    {
+        let options = {
+            method: 'DELETE',
+        }
+        fetch(`http://localhost:3000/users/${this.pubId}`, options)
+        .then(r => r.json())
+        .then(r => console.log(r))
+
+    }
+
+
+
 
 
 }
