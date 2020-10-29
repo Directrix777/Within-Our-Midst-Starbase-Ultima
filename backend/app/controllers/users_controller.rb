@@ -15,11 +15,11 @@ class UsersController < ApplicationController
         user.pubnub_id = params[:pubnub_id]
         user.color = get_color
         user.save
-        redirect_to user_path(user.pubnub_id)
+        render json: user
     end
 
     def destroy
-        user = User.find_by(id: params[:id])
+        user = User.find_by(pubnub_id: params[:id])
         if user
             user.delete
             render json: {message: 'Successfully deleted!'}
@@ -30,14 +30,13 @@ class UsersController < ApplicationController
 
     def get_color
         colors = ['red', 'blue', 'green', 'pink', 'orange', 'yellow', 'black', 'white', 'purple', 'brown', 'cyan', 'lime']
-        final_color = 'weird green'
+        users = User.all
+        user_colors = users.collect{|user| user.color}
         colors.each do |color|
-            users = User.all
-            user_colors = users.collect{|user| user.color}
-            if !(user_colors.include?(color) && final_color == 'weird green')
-                final_color = color
+            if !(user_colors.include?(color))
+                return color
             end
         end
-        return final_color
+        return 'weird green'
     end
 end
