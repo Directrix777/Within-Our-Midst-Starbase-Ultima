@@ -29,18 +29,27 @@ pubnub.addListener({
         let d = document.createElement('div')
         let name = document.createElement('h5')
         let p = document.createElement('p')
+        let icon = document.createElement('img')
+        icon.src = '../avatars/Player - Among Us/General/playerIcon.png'
         p.innerText = m.message
+        p.style.overflow = 'hidden'
         
         if (m.publisher == pubnub.getUUID())
         {
             d.className = "my-message"
             name.innerText = user.name
+            icon.className = `my-icon ${user.color}-icon`
         }
         else
         {
             d.className = "message"
-            User.takeDbVersion(m.publisher).then(r => {name.innerText = r['name']})
+            User.takeDbVersion(m.publisher).then(r => {
+                name.innerText = r['name']
+                icon.className = `icon ${r['color']}-icon`
+            })
+            
         }
+        d.appendChild(icon)
         d.appendChild(name)
         d.appendChild(p)
         d.className = `${d.className} container-sm`
