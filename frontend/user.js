@@ -55,14 +55,12 @@ class User
         {
             let potentialNewTask = new Task(this.id)
             let taskNames = this.tasks.map(function(task) {return task.name})
-            console.log(taskNames.includes(potentialNewTask.name))
             if(!taskNames.includes(potentialNewTask.name))
             {
                 potentialNewTask.makeDbVersion()
                 this.tasks.push(potentialNewTask)
             }
         }
-        console.log(this.tasks)
     }
 
 }
