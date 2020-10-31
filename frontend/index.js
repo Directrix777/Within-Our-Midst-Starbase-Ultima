@@ -13,6 +13,11 @@ const tasks = new PubNub({
     ssl: true
 })
 const user = new User(prompt("Enter your player name"), pubID)
+user.makeDbVersion().then(r => {
+    user.assignTasks(6)
+    console.log("saved")
+    console.log(user)
+})
 pubnub.subscribe({channels: ["aliveChat"], withPresence: true});
 let leave = document.createElement('button')
 leave.addEventListener('click', function(){user.breakDbVersion()})
@@ -98,6 +103,7 @@ function sendMessage(e, chatInput) {
         chatInput.value = '';
     }
 }
+console.log(user)
 
 // Add event listener for the textarea of the chat UI
 let chatInput = document.querySelector('#content')

@@ -2,22 +2,14 @@ class User
 {
     constructor(name, pubId, color = '', alreadyInDb = false)
     {
+        this.tasks = []
         this.name = name
         this.alive = true
         this.pubId = pubId
-        if(!alreadyInDb)
+        if(alreadyInDb)
         {
-            this.makeDbVersion()
+            this.color = color
         }
-        else
-        {
-            this.moreVariableSetup(color)
-        }
-    }
-
-    moreVariableSetup(color)
-    {
-        this.color = color
     }
 
     makeDbVersion()
@@ -30,10 +22,11 @@ class User
             },
             body: JSON.stringify({name: this.name, pubnub_id: this.pubId})
         }
-        fetch('http://localhost:3000/users', options)
+         return fetch('http://localhost:3000/users', options)
         .then(r => r.json())
         .then(r => { 
-            this.moreVariableSetup(r['color'])
+            this.id = r['id'] 
+            this.color = r['color']
         })
     }
 
@@ -55,9 +48,21 @@ class User
         .then(r => console.log(r))
 
     }
-
-
-
-
+    
+    assignTasks(number)
+    {
+        while(this.tasks.length < number)
+        {
+            let potentialNewTask = new Task(this.id)
+            let taskNames = this.tasks.map(function(task) {return task.name})
+            console.log(taskNames.includes(potentialNewTask.name))
+            if(!taskNames.includes(potentialNewTask.name))
+            {
+                potentialNewTask.makeDbVersion()
+                this.tasks.push(potentialNewTask)
+            }
+        }
+        console.log(this.tasks)
+    }
 
 }
