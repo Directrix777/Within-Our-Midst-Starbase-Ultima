@@ -12,17 +12,72 @@ const tasks = new PubNub({
     subscribe_key: 'sub-c-691174e4-17aa-11eb-a3e5-1aef4acbe547',
     ssl: true
 })
-const user = new User(prompt("Enter your player name"), pubID)
+let user = new User(prompt("Enter your player name"), pubID)
 user.makeDbVersion().then(r => {
     user.assignTasks(6)
-    console.log("saved")
+    listTasksOnMap(user.tasks)
     console.log(user)
 })
 pubnub.subscribe({channels: ["aliveChat"], withPresence: true});
+let map = document.createElement('div')
+map.className = 'map'
+    let closeMap = document.createElement('button')
+    closeMap.addEventListener('click', function(){map.style.display = 'none'})
+    closeMap.innerText = "Close Map"
+    map.appendChild(closeMap)
+    let myTaskElements = document.createElement('div')
+    myTaskElements.className = 'tasks-card'
+    map.appendChild(myTaskElements)
+    map.appendChild(createRoomCard('Dropship', ['Dropship: Chart Course']))
+    map.appendChild(createRoomCard('Navigation', ['Navigation: Stabilize Steering', 'Navigation: Chart Course', 'Navigation: Clear Asteroids']))
+    map.appendChild(createRoomCard('Storage', ['Storage: Store Artifacts']))
+    map.appendChild(createRoomCard('Laboratory', ['Laboratory: Record Temperature', 'Laboratory: Assemble Artifact']))
+    map.appendChild(createRoomCard('Reactor', ['Reactor: Unlock Manifolds']))
+    map.appendChild(createRoomCard('O2', ['O2: Fill Canisters', 'O2: Clean O2 Filter']))
+    map.appendChild(createRoomCard('Greenhouse', ['Greenhouse: Clean O2 Filter']))
+    map.appendChild(createRoomCard('Courtyard', ['Courtyard: Monitor Tree']))
+    map.appendChild(createRoomCard('Cafeteria', ['Cafeteris: Buy Beverage']))
+    map.appendChild(createRoomCard('Admin', ['Admin: Prime Shields']))
+    map.appendChild(createRoomCard('Hangar', ['Hangar: Run Diagnostics']))
+
+document.body.appendChild(map)
 let leave = document.createElement('button')
 leave.addEventListener('click', function(){user.breakDbVersion()})
 leave.innerText = "Leave"
 document.body.appendChild(leave)
+let showMap = document.createElement('button')
+showMap.addEventListener('click', function(){map.style.display = 'table'})
+showMap.innerText = "Show Map"
+document.body.appendChild(showMap)
+
+function listTasksOnMap(taskList)
+{
+    taskList.forEach((task) => {
+        let taskListing = document.createElement('p')
+        taskListing.innerText = task.name
+        myTaskElements.appendChild(taskListing)
+    })
+}
+
+function createRoomCard(roomName, taskNames)
+{
+    let roomCard = document.createElement('div')
+    roomCard.className = 'room-card'
+    let roomHeader = document.createElement('h3')
+    roomHeader.innerText = roomName
+    roomCard.appendChild(roomHeader)
+    taskNames.forEach((name) => {
+        let taskListing = document.createElement('p')
+        taskListing.innerText = name
+            let finishTask = document.createElement('button')
+            finishTask.innerText = "Do task"
+            finishTask.addEventListener('click', function() {console.log(`supposed to be doing a task in ${taskListing.innerText}`.slice(0, -7))})
+            taskListing.appendChild(finishTask)
+        roomCard.appendChild(taskListing)
+    })
+    return roomCard
+}
+
 pubnub.addListener({
     message: function(m) {
         // handle message
@@ -103,7 +158,6 @@ function sendMessage(e, chatInput) {
         chatInput.value = '';
     }
 }
-console.log(user)
 
 // Add event listener for the textarea of the chat UI
 let chatInput = document.querySelector('#content')

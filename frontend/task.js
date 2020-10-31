@@ -8,9 +8,8 @@ class Task
 
     randomTask()
     {
-        const taskNames = ['Dropship: Chart Course', 'Courtyard: Monitor Tree', 'O2: Clean O2 Filter', 'Greenhouse: Clean O2 Filter', 'Laboratory: Record Temperature', 'Reactor: Unlock Manifolds', 'Storage: Store Artifacts', 'Laboratory: Assemble Artifact', 'Cafeteria: Buy Beverage', 'Navigation: Prime Shields', 'Navigation: Stabilize Steering', 'Navigation: Chart Course', 'O2: Fill Canisters', 'Navigation: Clear Asteroids', 'Hangar: Run Diagnostics']
+        const taskNames = ['Dropship: Chart Course', 'Courtyard: Monitor Tree', 'O2: Clean O2 Filter', 'Greenhouse: Clean O2 Filter', 'Laboratory: Record Temperature', 'Reactor: Unlock Manifolds', 'Storage: Store Artifacts', 'Laboratory: Assemble Artifact', 'Cafeteria: Buy Beverage', 'Admin: Prime Shields', 'Navigation: Stabilize Steering', 'Navigation: Chart Course', 'O2: Fill Canisters', 'Navigation: Clear Asteroids', 'Hangar: Run Diagnostics']
         const num = parseInt(Math.random() * 15)
-        console.log(num)
         return taskNames[num]
     }
 
