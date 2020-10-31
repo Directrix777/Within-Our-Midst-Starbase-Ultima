@@ -24,6 +24,7 @@ map.className = 'map'
     let closeMap = document.createElement('button')
     closeMap.addEventListener('click', function(){map.style.display = 'none'})
     closeMap.innerText = "Close Map"
+    closeMap.style.float = 'left'
     map.appendChild(closeMap)
     let myTaskElements = document.createElement('div')
     myTaskElements.className = 'tasks-card'
