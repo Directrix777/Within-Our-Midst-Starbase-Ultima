@@ -1,30 +1,38 @@
 class UsersController < ApplicationController
     def index
-        users = User.all
-        render json: users
+        @@lock.synchronize do
+            users = User.all
+            render json: users
+        end
     end
 
     def show
-        user = User.find_by(pubnub_id: params[:id])
-        render json: user
+        @@lock.synchronize do
+            user = User.find_by(pubnub_id: params[:id])
+            render json: user
+        end
     end
 
     def create
-        user = User.new
-        user.name = params[:name]
-        user.pubnub_id = params[:pubnub_id]
-        user.color = get_color
-        user.save
-        render json: user
+        @@lock.synchronize do
+            user = User.new
+            user.name = params[:name]
+            user.pubnub_id = params[:pubnub_id]
+            user.color = get_color
+            user.save
+            render json: user
+        end
     end
 
     def destroy
-        user = User.find_by(pubnub_id: params[:id])
-        if user
-            user.delete
-            render json: {message: 'Successfully deleted!'}
-        else
-            render json: {message: 'User not found'}
+        @@lock.synchronize do
+            user = User.find_by(pubnub_id: params[:id])
+            if user
+                user.delete
+                render json: {message: 'Successfully deleted!'}
+            else
+                render json: {message: 'User not found'}
+            end
         end
     end
 
