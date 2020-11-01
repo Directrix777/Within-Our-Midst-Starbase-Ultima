@@ -11,7 +11,7 @@ class TasksController < ApplicationController
 
     def destroy
         @@lock.synchronize do
-            task = Task.find_by(pubnub_id: params[:id])
+            task = Task.find_by(id: params[:id])
             if task
                 task.delete
                 render json: {message: 'Successfully deleted!'}
