@@ -23,10 +23,11 @@ class Task
             },
             body: JSON.stringify({task_name: this.name, user_id: this.userId})
         }
-        // fetch('http://localhost:3000/tasks', options)
-        // .then(r => r.json())
-        // .then(r => { 
-        //     console.log(r)
-        // })
+        fetch('http://localhost:3000/tasks', options)
+        .then(r => r.json())
+        .then(r => {
+            this.id = r['id'] 
+            console.log(r)
+        })
     }
 }
