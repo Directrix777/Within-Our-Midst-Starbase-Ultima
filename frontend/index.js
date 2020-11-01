@@ -1,5 +1,4 @@
 const pubID = parseInt(Math.random()*1000000)
-console.log(pubID)
 const pubnub = new PubNub({
     uuid: pubID,
     publish_key: 'pub-c-a2f1cf1d-ce28-4242-8e93-cf10ca8cbafe',
@@ -16,7 +15,6 @@ let user = new User(prompt("Enter your player name"), pubID)
 user.makeDbVersion().then(r => {
     user.assignTasks(6)
     listTasksOnMap(user.tasks)
-    console.log(user)
 })
 pubnub.subscribe({channels: ["aliveChat"], withPresence: true});
 let map = document.createElement('div')
