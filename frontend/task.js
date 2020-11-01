@@ -30,4 +30,15 @@ class Task
             console.log(r)
         })
     }
+
+    breakDbVersion()
+    {
+        let options = {
+            method: 'DELETE',
+        }
+        fetch(`http://localhost:3000/tasks/${this.id}`, options)
+        .then(r => r.json())
+        .then(r => console.log(r))
+    }
+
 }
