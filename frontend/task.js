@@ -4,6 +4,7 @@ class Task
     {
         this.userId = userId
         this.name = this.randomTask()
+        this.done = false
     }
 
     randomTask()

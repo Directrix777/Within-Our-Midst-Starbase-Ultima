@@ -72,7 +72,7 @@ function createRoomCard(roomName, taskNames)
         taskListing.innerText = name
             let finishTask = document.createElement('button')
             finishTask.innerText = "Do task"
-            finishTask.addEventListener('click', function() {console.log(`supposed to be doing a task in ${taskListing.innerText}`.slice(0, -7))})
+            finishTask.addEventListener('click', function() {user.doTask(taskListing.innerText.slice(0, -7))})
             taskListing.appendChild(finishTask)
         roomCard.appendChild(taskListing)
     })

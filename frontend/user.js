@@ -65,4 +65,31 @@ class User
         }
     }
 
+    doTask(taskName)
+    {
+        let hasTask = false
+        for(let i = 0; i < this.tasks.length; i++){
+
+            let currentTask = this.tasks[i]
+            if(currentTask.name == taskName)
+            {
+                hasTask = true
+                if(currentTask.done == true)
+                {
+                    alert("You've already finished this task!")
+                }
+                else
+                {
+                currentTask.breakDbVersion()
+                currentTask.done = true
+                myTaskElements.children[i].style.color = '#28a745'
+                }
+            }
+        }
+        if(hasTask == false)
+        {
+            alert("You don't have this task!")
+        }
+    }
+
 }
