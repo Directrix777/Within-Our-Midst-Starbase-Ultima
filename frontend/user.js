@@ -40,6 +40,8 @@ class User
 
     breakDbVersion()
     {
+        this.tasks.forEach(function(task) {task.breakDbVersion()})
+
         let options = {
             method: 'DELETE',
         }
